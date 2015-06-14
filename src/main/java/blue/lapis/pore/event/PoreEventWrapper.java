@@ -30,11 +30,6 @@ import static com.google.common.base.Preconditions.checkState;
 
 import blue.lapis.pore.Pore;
 import blue.lapis.pore.converter.type.plugin.EventPriorityConverter;
-import blue.lapis.pore.impl.event.block.PoreBlockBreakEvent;
-import blue.lapis.pore.impl.event.player.PoreAsyncPlayerChatEvent;
-import blue.lapis.pore.impl.event.player.PorePlayerJoinEvent;
-import blue.lapis.pore.impl.event.player.PorePlayerQuitEvent;
-import blue.lapis.pore.impl.event.server.PoreServerListPingEvent;
 import blue.lapis.pore.util.constructor.PoreConstructors;
 import blue.lapis.pore.util.constructor.SimpleConstructor;
 
@@ -53,7 +48,6 @@ import org.spongepowered.api.service.event.EventManager;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.logging.Level;
