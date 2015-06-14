@@ -40,6 +40,7 @@ import blue.lapis.pore.util.constructor.SimpleConstructor;
 
 import com.google.common.collect.MapMaker;
 import com.google.common.collect.Maps;
+import com.google.common.reflect.ClassPath;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
@@ -49,25 +50,39 @@ import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.SimplePluginManager;
 import org.spongepowered.api.service.event.EventManager;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.logging.Level;
 
 public final class PoreEventWrapper {
 
+    private static final String EVENT_PACKAGE = "blue.lapis.pore.impl.event";
+
     private PoreEventWrapper() {
     }
 
+    @SuppressWarnings("unchecked")
     public static void register() {
-        register(PorePlayerJoinEvent.class);
-        register(PorePlayerQuitEvent.class);
-        register(PoreAsyncPlayerChatEvent.class);
-
-        register(PoreBlockBreakEvent.class);
-
-        register(PoreServerListPingEvent.class);
+        try {
+            for (ClassPath.ClassInfo classInfo : ClassPath.from(PoreEventWrapper.class.getClassLoader())
+                    .getTopLevelClassesRecursive(EVENT_PACKAGE)) { // iterate all classes in the event package
+                Class<?> eventClass = classInfo.load(); // load the class
+                if (Event.class.isAssignableFrom(eventClass)) { // verify it's an event
+                    // check the annotation to see if it's marked to be registered dynamically
+                    if (eventClass.isAnnotationPresent(DynamicallyReigster.class)) {
+                        register((Class<? extends Event>)eventClass); // register it!
+                    }
+                }
+            }
+        }
+        catch (IOException ex) { // ouch
+            ex.printStackTrace();
+            Pore.getLogger().error("Failed to register events! This might sting a bit...");
+        }
     }
 
     public static void call(Event event, EventPriority priority) {

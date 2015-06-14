@@ -26,6 +26,7 @@ package blue.lapis.pore.impl.event.server;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import blue.lapis.pore.event.DynamicallyReigster;
 import blue.lapis.pore.impl.util.PoreCachedServerIcon;
 
 import org.bukkit.entity.Player;
@@ -38,6 +39,7 @@ import org.spongepowered.api.util.TextMessageException;
 import java.net.InetAddress;
 import java.util.Iterator;
 
+@DynamicallyReigster
 public class PoreServerListPingEvent extends ServerListPingEvent {
 
     private final StatusPingEvent handle;
